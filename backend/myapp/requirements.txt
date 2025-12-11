@@ -1,0 +1,9 @@
+pyramid==2.0.2
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
+zope.sqlalchemy==3.1
+pyramid_tm==2.5
+waitress==2.1.2
+PyJWT==2.8.0
+bcrypt==4.1.2
+transaction==4.0

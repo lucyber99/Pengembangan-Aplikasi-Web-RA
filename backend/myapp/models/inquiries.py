@@ -1,0 +1,26 @@
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from datetime import datetime
+from ..db import Base
+
+class Inquiry(Base):
+    __tablename__ = 'inquiries'
+    
+    id = Column(Integer, primary_key=True)
+    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
+    buyer_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    message = Column(Text, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    property = relationship('Property', back_populates='inquiries')
+    buyer = relationship('User', back_populates='inquiries', foreign_keys=[buyer_id])
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'property_id': self.property_id,
+            'buyer_id': self.buyer_id,
+            'message': self.message,
+            'date': self.date.isoformat() if self.date else None
+        }
