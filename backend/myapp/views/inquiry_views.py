@@ -34,7 +34,10 @@ def list_inquiries(request):
 @require_auth
 def get_property_inquiries(request):
     """Get all inquiries for a specific property (agent/admin only)"""
-    property_id = request.matchdict['id']
+    try:
+        property_id = int(request.matchdict['id'])
+    except (ValueError, TypeError):
+        raise HTTPBadRequest('Invalid property id')
     
     property = DBSession.query(Property).filter(Property.id == property_id).first()
     

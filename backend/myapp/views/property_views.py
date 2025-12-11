@@ -1,5 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound, HTTPForbidden
+from sqlalchemy.orm import selectinload
+
 from ..db import DBSession
 from ..models import Property, PropertyPhoto
 from ..security import require_auth, require_role
@@ -40,7 +42,10 @@ def list_properties(request):
 @view_config(route_name='property_detail', renderer='json', request_method='GET')
 def get_property(request):
     """Get single property by ID"""
-    property_id = request.matchdict['id']
+    try:
+        property_id = int(request.matchdict['id'])
+    except (ValueError, TypeError):
+        raise HTTPBadRequest('Invalid property id')
     
     property = DBSession.query(Property).filter(Property.id == property_id).first()
     
@@ -96,11 +101,19 @@ def create_property(request):
                 DBSession.add(photo)
         
         transaction.commit()
+
+        # Reload with photos eagerly to avoid detached errors
+        property_with_photos = (
+            DBSession.query(Property)
+            .options(selectinload(Property.photos))
+            .filter(Property.id == property.id)
+            .first()
+        )
         
         return {
             'success': True,
             'message': 'Property created successfully',
-            'property': property.to_dict(include_photos=True)
+            'property': property_with_photos.to_dict(include_photos=True) if property_with_photos else property.to_dict()
         }
         
     except HTTPBadRequest:
@@ -114,7 +127,10 @@ def create_property(request):
 def update_property(request):
     """Update property"""
     try:
-        property_id = request.matchdict['id']
+        try:
+            property_id = int(request.matchdict['id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid property id')
         data = request.json_body
         
         property = DBSession.query(Property).filter(Property.id == property_id).first()
@@ -148,11 +164,19 @@ def update_property(request):
             property.area = data['area']
         
         transaction.commit()
-        
+
+        # Reload with photos eagerly to avoid detached errors
+        property_with_photos = (
+            DBSession.query(Property)
+            .options(selectinload(Property.photos))
+            .filter(Property.id == property.id)
+            .first()
+        )
+
         return {
             'success': True,
             'message': 'Property updated successfully',
-            'property': property.to_dict(include_photos=True)
+            'property': property_with_photos.to_dict(include_photos=True) if property_with_photos else property.to_dict()
         }
         
     except (HTTPNotFound, HTTPForbidden, HTTPBadRequest):
@@ -166,7 +190,10 @@ def update_property(request):
 def delete_property(request):
     """Delete property"""
     try:
-        property_id = request.matchdict['id']
+        try:
+            property_id = int(request.matchdict['id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid property id')
         
         property = DBSession.query(Property).filter(Property.id == property_id).first()
         
@@ -196,7 +223,10 @@ def delete_property(request):
 def add_property_photo(request):
     """Add photo to property"""
     try:
-        property_id = request.matchdict['id']
+        try:
+            property_id = int(request.matchdict['id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid property id')
         data = request.json_body
         
         if 'photo_url' not in data:
@@ -236,7 +266,10 @@ def add_property_photo(request):
 def delete_property_photo(request):
     """Delete property photo"""
     try:
-        photo_id = request.matchdict['photo_id']
+        try:
+            photo_id = int(request.matchdict['photo_id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid photo id')
         
         photo = DBSession.query(PropertyPhoto).filter(PropertyPhoto.id == photo_id).first()
         
