@@ -1,5 +1,6 @@
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
+from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPNotFound
+
 from ..db import DBSession
 from ..models import Inquiry, Property
 from ..security import require_auth
@@ -30,14 +31,19 @@ def list_inquiries(request):
     }
 
 @view_config(route_name='property_inquiries', renderer='json', request_method='GET')
+@require_auth
 def get_property_inquiries(request):
-    """Get all inquiries for a specific property"""
+    """Get all inquiries for a specific property (agent/admin only)"""
     property_id = request.matchdict['id']
     
     property = DBSession.query(Property).filter(Property.id == property_id).first()
     
     if not property:
         raise HTTPNotFound('Property not found')
+
+    # Only the owner agent or admin can view inquiries for this listing
+    if request.current_user.role != 'admin' and property.agent_id != request.current_user.id:
+        raise HTTPForbidden('You do not have permission to view these inquiries')
     
     inquiries = DBSession.query(Inquiry).filter(Inquiry.property_id == property_id).all()
     
@@ -88,13 +94,20 @@ def create_inquiry(request):
 @view_config(route_name='inquiry_detail', renderer='json', request_method='GET')
 @require_auth
 def get_inquiry(request):
-    """Get single inquiry"""
+    """Get single inquiry with role-based access"""
     inquiry_id = request.matchdict['id']
     
     inquiry = DBSession.query(Inquiry).filter(Inquiry.id == inquiry_id).first()
     
     if not inquiry:
         raise HTTPNotFound('Inquiry not found')
+
+    # Buyer can view own inquiry, agent can view inquiries on their properties, admin can view all
+    if request.current_user.role != 'admin':
+        is_buyer_owner = request.current_user.role == 'buyer' and inquiry.buyer_id == request.current_user.id
+        is_agent_owner = request.current_user.role == 'agent' and inquiry.property and inquiry.property.agent_id == request.current_user.id
+        if not (is_buyer_owner or is_agent_owner):
+            raise HTTPForbidden('You do not have permission to view this inquiry')
     
     return {
         'success': True,
@@ -104,7 +117,7 @@ def get_inquiry(request):
 @view_config(route_name='delete_inquiry', renderer='json', request_method='DELETE')
 @require_auth
 def delete_inquiry(request):
-    """Delete inquiry"""
+    """Delete inquiry with role-based access"""
     try:
         inquiry_id = request.matchdict['id']
         
@@ -112,6 +125,13 @@ def delete_inquiry(request):
         
         if not inquiry:
             raise HTTPNotFound('Inquiry not found')
+
+        # Buyer can delete own inquiry; agent/admin can delete inquiries for their listings
+        if request.current_user.role != 'admin':
+            is_buyer_owner = request.current_user.role == 'buyer' and inquiry.buyer_id == request.current_user.id
+            is_agent_owner = request.current_user.role == 'agent' and inquiry.property and inquiry.property.agent_id == request.current_user.id
+            if not (is_buyer_owner or is_agent_owner):
+                raise HTTPForbidden('You do not have permission to delete this inquiry')
         
         DBSession.delete(inquiry)
         transaction.commit()

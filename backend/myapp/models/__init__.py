@@ -1,3 +1,5 @@
+"""Expose ORM models for easy imports across the app."""
+
 from .users import User
 from .properties import Property
 from .photos import PropertyPhoto

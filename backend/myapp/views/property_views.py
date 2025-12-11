@@ -66,7 +66,7 @@ def create_property(request):
                 raise HTTPBadRequest(f'Missing required field: {field}')
         
         # Validate property type
-        valid_types = ['house', 'apartment', 'land', 'commercial']
+        valid_types = ['house', 'apartment']
         if data['type'] not in valid_types:
             raise HTTPBadRequest(f'Invalid type. Must be one of: {", ".join(valid_types)}')
         
@@ -134,7 +134,7 @@ def update_property(request):
         if 'price' in data:
             property.price = data['price']
         if 'type' in data:
-            valid_types = ['house', 'apartment', 'land', 'commercial']
+            valid_types = ['house', 'apartment']
             if data['type'] not in valid_types:
                 raise HTTPBadRequest(f'Invalid type. Must be one of: {", ".join(valid_types)}')
             property.type = data['type']

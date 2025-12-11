@@ -1,10 +1,10 @@
 import jwt
 import bcrypt
 from datetime import datetime, timedelta
-from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.httpexceptions import HTTPForbidden, HTTPUnauthorized
 from functools import wraps
 
-SECRET_KEY = 'your-secret-key-change-this-in-production'
+SECRET_KEY = 'ykdwh2Jkbps2TZNmn3axjG39eJuVVLQOQFbzOs5PGXUHqe2tPRlhs+e9+Z499Bg8e+17oIVhjsp0x7GiS+bIlw=='
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 
@@ -72,7 +72,7 @@ def require_role(*roles):
         def wrapper(request):
             request.current_user = get_current_user(request)
             if request.current_user.role not in roles:
-                raise HTTPUnauthorized('Insufficient permissions')
+                raise HTTPForbidden('Insufficient permissions')
             return func(request)
         return wrapper
     return decorator
