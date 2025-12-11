@@ -98,8 +98,11 @@ def create_inquiry(request):
 @require_auth
 def get_inquiry(request):
     """Get single inquiry with role-based access"""
-    inquiry_id = request.matchdict['id']
-    
+    try:
+        inquiry_id = int(request.matchdict['id'])
+    except (ValueError, TypeError):
+        raise HTTPBadRequest('Invalid inquiry id')
+
     inquiry = DBSession.query(Inquiry).filter(Inquiry.id == inquiry_id).first()
     
     if not inquiry:
@@ -122,8 +125,11 @@ def get_inquiry(request):
 def delete_inquiry(request):
     """Delete inquiry with role-based access"""
     try:
-        inquiry_id = request.matchdict['id']
-        
+        try:
+            inquiry_id = int(request.matchdict['id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid inquiry id')
+
         inquiry = DBSession.query(Inquiry).filter(Inquiry.id == inquiry_id).first()
         
         if not inquiry:

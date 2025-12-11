@@ -28,5 +28,5 @@ def includeme(config):
     # Favorites routes
     config.add_route('favorites', '/api/favorites')
     config.add_route('add_favorite', '/api/favorites/add')
-    config.add_route('remove_favorite', '/api/favorites/{property_id}')
+    config.add_route('remove_favorite', '/api/favorites/remove/{property_id}')
     config.add_route('check_favorite', '/api/favorites/check/{property_id}')
