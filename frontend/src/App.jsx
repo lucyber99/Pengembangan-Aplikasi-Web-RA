@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PropertyCard from './components/PropertyCard';
+import Hero from './components/Hero';
+import SectionHeader from './components/SectionHeader';
 
 const sampleProperties = [
   {
@@ -85,22 +87,13 @@ function App() {
     <>
       <Navbar apiBase={apiBase} />
       <main className="page landing">
-        <section className="hero landing-hero">
-          <div className="landing-hero__content">
-            <p className="eyebrow">Platform listing properti</p>
-            <h1>Bangun portal jual/sewa dengan React + Pyramid API</h1>
-            <p className="lede">
-              Listing, inquiry, favorites, dan dashboard agent dalam satu stack. Start backend di
-              <code>http://localhost:6543</code> lalu kembangkan UI ini.
-            </p>
-            <div className="landing-cta">
-              <a className="btn primary" href="#properties">
-                Lihat properti
-              </a>
-              <a className="btn ghost" href="#features">
-                Lihat fitur
-              </a>
-            </div>
+        <Hero
+          title="Find your"
+          highlight="place to live."
+          subtitle="Discover the perfect property with the best deals and locations. Start your journey in just a few clicks."
+          ctaLabel="Search Properties"
+          ctaHref="#properties"
+          status={
             <div className="status status--pill">
               <span className={`dot ${apiStatus}`} />
               <span>
@@ -108,36 +101,16 @@ function App() {
                 {apiStatus === 'ok' && 'Backend terhubung'}
                 {apiStatus === 'error' && 'Backend tidak terhubung'}
               </span>
+              {message && <span className="status-detail-inline">{message}</span>}
             </div>
-            {message && <p className="status-detail">{message}</p>}
-          </div>
-          <div className="landing-hero__panel">
-            <div className="panel-card">
-              <div className="panel-label">Roadmap</div>
-              <ul>
-                <li>Auth buyer/agent</li>
-                <li>CRUD properti + foto</li>
-                <li>Favorites & inquiry</li>
-                <li>Filter harga/tipe/lokasi</li>
-              </ul>
-            </div>
-            <div className="panel-card panel-card--accent">
-              <div className="panel-label">API base</div>
-              <div className="panel-value">{apiBase}</div>
-              <div className="panel-note">Ubah di frontend/.env</div>
-            </div>
-          </div>
-        </section>
+          }
+        />
 
         <section className="feature-section" id="features">
-          <div className="section-header">
-            <p className="eyebrow">Fitur</p>
-            <h2>Semua kebutuhan listing properti</h2>
-            <p className="lede">
-              Dari publikasi listing sampai komunikasi dengan calon pembeli, semua endpoint Pyramid
-              sudah disiapkan. Tinggal hubungkan komponen React.
-            </p>
-          </div>
+          <SectionHeader title="Featured Properties" actionLabel="View all" actionHref="#properties" />
+          <p className="lede">
+            Listing unggulan yang bisa langsung dihubungkan ke endpoint <code>/api/properties</code>.
+          </p>
           <div className="feature-grid">
             {featureCards.map((card) => (
               <article key={card.title} className="feature-card">
@@ -153,13 +126,10 @@ function App() {
         </section>
 
         <section className="showcase" id="properties">
-          <div className="section-header">
-            <p className="eyebrow">Preview listings</p>
-            <h2>Contoh data dummy untuk UI</h2>
-            <p className="lede">
-              Nanti ganti dengan data dari endpoint <code>/api/properties</code>.
-            </p>
-          </div>
+          <SectionHeader title="Browse by Location" actionLabel="View all" actionHref="#locations" />
+          <p className="lede">
+            Contoh data dummy sebelum disambungkan ke data nyata.
+          </p>
           <div className="property-grid">
             {sampleProperties.map((property, idx) => (
               <PropertyCard key={property.id} property={property} favorite={idx === 0} />

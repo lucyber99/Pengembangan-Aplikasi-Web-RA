@@ -205,6 +205,30 @@ main.page {
   margin-bottom: 32px;
 }
 
+.hero-block {
+  padding: 36px 0 12px;
+  display: grid;
+  gap: 14px;
+}
+
+.hero-block__highlight {
+  color: #2563eb;
+}
+
+.hero-block__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-detail-inline {
+  display: inline-block;
+  margin-left: 8px;
+  color: #475569;
+  font-weight: 500;
+}
+
 .landing-hero {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -369,8 +393,22 @@ li {
   gap: 18px;
 }
 
+.section-header {
+  margin-bottom: 4px;
+}
+
 .section-header h2 {
   margin: 4px 0 8px;
+}
+
+.section-header__action {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.section-header__action:hover {
+  text-decoration: underline;
 }
 
 .feature-grid {
