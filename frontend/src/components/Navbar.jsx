@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Navbar = ({ apiBase }) => {
   return (
     <header className="navbar">
@@ -33,9 +35,9 @@ const Navbar = ({ apiBase }) => {
             <span className="dot ok" aria-hidden />
             <span className="navbar__api-value">{apiBase || 'http://localhost:6543'}</span>
           </div>
-          <a className="btn nav-btn" href="#login">
+          <Link className="btn nav-btn" to="/login">
             Sign in
-          </a>
+          </Link>
           <div className="navbar__avatar" aria-label="Profile">
             <span>JD</span>
           </div>
