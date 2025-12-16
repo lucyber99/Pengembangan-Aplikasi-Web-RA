@@ -1,26 +1,11 @@
-type Property = {
-  id: number;
-  title: string;
-  location: string;
-  price: number;
-  type: 'House' | 'Apartment';
-  beds: number;
-  baths: number;
-  area: number;
-  photoUrl: string;
-};
+const formatPrice = (value) =>
+  new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    maximumFractionDigits: 0,
+  }).format(value);
 
-type PropertyCardProps = {
-  property: Property;
-  favorite?: boolean;
-};
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(
-    value,
-  );
-
-const PropertyCard = ({ property, favorite }: PropertyCardProps) => {
+const PropertyCard = ({ property, favorite }) => {
   return (
     <article className="property-card">
       <div
@@ -39,12 +24,11 @@ const PropertyCard = ({ property, favorite }: PropertyCardProps) => {
         <div className="property-card__meta">
           <span>{property.beds} bd</span>
           <span>{property.baths} ba</span>
-          <span>{property.area} m²</span>
+          <span>{property.area} sqm</span>
         </div>
       </div>
     </article>
   );
 };
 
-export type { Property };
 export default PropertyCard;

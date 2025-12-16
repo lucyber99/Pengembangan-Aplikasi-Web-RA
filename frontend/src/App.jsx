@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import PropertyCard, { type Property } from './components/PropertyCard';
+import PropertyCard from './components/PropertyCard';
 
-type ApiStatus = 'idle' | 'ok' | 'error';
-
-const sampleProperties: Property[] = [
+const sampleProperties = [
   {
     id: 1,
     title: 'Modern Scandinavian House',
@@ -60,13 +58,10 @@ const featureCards = [
 ];
 
 function App() {
-  const [apiStatus, setApiStatus] = useState<ApiStatus>('idle');
-  const [message, setMessage] = useState<string>('');
+  const [apiStatus, setApiStatus] = useState('idle');
+  const [message, setMessage] = useState('');
 
-  const apiBase = useMemo(
-    () => (import.meta.env.VITE_API_BASE as string | undefined) ?? 'http://localhost:6543',
-    [],
-  );
+  const apiBase = useMemo(() => import.meta.env.VITE_API_BASE || 'http://localhost:6543', []);
 
   useEffect(() => {
     const checkApi = async () => {
