@@ -430,6 +430,11 @@ li {
   color: #0f172a;
 }
 
+.feature-card__desc {
+  margin: 0;
+  color: #475569;
+}
+
 .feature-card ul {
   padding-left: 18px;
   margin: 0;
@@ -540,6 +545,34 @@ li {
   display: flex;
   gap: 10px;
   margin-top: 12px;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.location-card {
+  position: relative;
+  border-radius: 12px;
+  min-height: 140px;
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  align-content: end;
+  padding: 12px;
+  color: #f8fafc;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+}
+
+.location-card__title {
+  font-weight: 700;
+}
+
+.location-card__meta {
+  color: #e2e8f0;
+  font-size: 0.95rem;
 }
 
 .site-footer {
