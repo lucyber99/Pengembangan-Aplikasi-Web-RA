@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import PropertyCard from './components/PropertyCard';
-import Hero from './components/Hero';
-import SectionHeader from './components/SectionHeader';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import Hero from '../components/Hero';
+import SectionHeader from '../components/SectionHeader';
+import PropertyCard from '../components/PropertyCard';
 
 const sampleProperties = [
   {
@@ -44,22 +44,21 @@ const sampleProperties = [
   },
 ];
 
-const featureCards = [
-  {
-    title: 'Buyer experience',
-    points: ['Browse & filter harga/tipe/lokasi', 'Simpan favorit', 'Kirim inquiry ke agent'],
-  },
-  {
-    title: 'Agent cockpit',
-    points: ['CRUD properti + foto', 'Kelola inquiries', 'Dashboard cepat'],
-  },
-  {
-    title: 'Keamanan',
-    points: ['Auth JWT', 'Role buyer/agent', 'Protected routes'],
-  },
+const reasons = [
+  { title: 'Trusted Platform', desc: 'Terverifikasi, ready untuk transaksi aman.' },
+  { title: 'Wide Selection', desc: 'Rumah & apartemen terbaik di lokasi strategis.' },
+  { title: 'Expert Support', desc: 'Tim siap bantu filter & negosiasi properti.' },
+  { title: 'Easy Financing', desc: 'Ragam opsi KPR/financing yang dipersonalisasi.' },
 ];
 
-function App() {
+const locations = [
+  { name: 'New York', listings: '10k+ listings', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=900&q=80' },
+  { name: 'LosAngeles', listings: '8.2k listings', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80' },
+  { name: 'Chicago', listings: '6.4k listings', image: 'https://images.unsplash.com/photo-1529429617124-aee0bd51f4eb?auto=format&fit=crop&w=900&q=80' },
+  { name: 'Miami', listings: '5.7k listings', image: 'https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?auto=format&fit=crop&w=900&q=80' },
+];
+
+const LandingPage = () => {
   const [apiStatus, setApiStatus] = useState('idle');
   const [message, setMessage] = useState('');
 
@@ -74,9 +73,7 @@ function App() {
         setMessage('Backend reachable. Ready to build UI.');
       } catch (error) {
         setApiStatus('error');
-        setMessage(
-          'Tidak bisa menghubungi backend. Pastikan Pyramid jalan di 6543 atau set VITE_API_BASE.',
-        );
+        setMessage('Tidak bisa menghubungi backend. Pastikan Pyramid jalan di 6543 atau set VITE_API_BASE.');
       }
     };
 
@@ -111,25 +108,6 @@ function App() {
           <p className="lede">
             Listing unggulan yang bisa langsung dihubungkan ke endpoint <code>/api/properties</code>.
           </p>
-          <div className="feature-grid">
-            {featureCards.map((card) => (
-              <article key={card.title} className="feature-card">
-                <h3>{card.title}</h3>
-                <ul>
-                  {card.points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="showcase" id="properties">
-          <SectionHeader title="Browse by Location" actionLabel="View all" actionHref="#locations" />
-          <p className="lede">
-            Contoh data dummy sebelum disambungkan ke data nyata.
-          </p>
           <div className="property-grid">
             {sampleProperties.map((property, idx) => (
               <PropertyCard key={property.id} property={property} favorite={idx === 0} />
@@ -137,40 +115,38 @@ function App() {
           </div>
         </section>
 
-        <section className="workflow" id="dashboard">
-          <div className="workflow__card">
-            <h3>Untuk buyer</h3>
-            <ol>
-              <li>Register/login buyer</li>
-              <li>Browse, search, filter properti</li>
-              <li>Simpan favorit & kirim inquiry</li>
-            </ol>
+        <section className="feature-section" id="why">
+          <SectionHeader title="Why Choose Estatery" />
+          <div className="feature-grid">
+            {reasons.map((item) => (
+              <article key={item.title} className="feature-card">
+                <h3>{item.title}</h3>
+                <p className="feature-card__desc">{item.desc}</p>
+              </article>
+            ))}
           </div>
-          <div className="workflow__card">
-            <h3>Untuk agent</h3>
-            <ol>
-              <li>Login agent</li>
-              <li>Tambah/update/hapus listing + foto</li>
-              <li>Kelola inquiries di dashboard</li>
-            </ol>
-          </div>
-          <div className="workflow__card workflow__card--cta">
-            <h3>Mulai bangun UI</h3>
-            <p>Hook ke API Pyramid, tambahkan router, dan sambungkan state auth.</p>
-            <div className="cta-row">
-              <a className="btn primary" href="#features">
-                Lihat fitur
-              </a>
-              <a className="btn ghost" href="#properties">
-                Lihat listing
-              </a>
-            </div>
+        </section>
+
+        <section className="showcase" id="locations">
+          <SectionHeader title="Browse by Location" actionLabel="View all" actionHref="#locations" />
+          <div className="location-grid">
+            {locations.map((loc) => (
+              <article
+                key={loc.name}
+                className="location-card"
+                style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.35)), url(${loc.image})` }}
+                aria-label={loc.name}
+              >
+                <div className="location-card__title">{loc.name}</div>
+                <div className="location-card__meta">{loc.listings}</div>
+              </article>
+            ))}
           </div>
         </section>
       </main>
       <Footer />
     </>
   );
-}
+};
 
-export default App;
+export default LandingPage;
