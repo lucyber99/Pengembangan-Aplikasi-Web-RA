@@ -1,0 +1,104 @@
+.overview-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.overview-head__main {
+    flex: 1;
+    min-width: 300px;
+}
+
+.overview-head__title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px;
+    line-height: 1.2;
+}
+
+.overview-head__location {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.overview-head__tags {
+    display: flex;
+    gap: 10px;
+}
+
+.overview-head__tag {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.overview-head__tag--type {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.overview-head__tag--status {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.overview-head__stats {
+    text-align: left;
+}
+
+.overview-head__price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2563eb;
+    margin-bottom: 12px;
+    
+}
+
+.overview-head__meta {
+    display: flex;
+    gap: 24px;
+    justify-content: flex-start;
+}
+
+.overview-head__meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overview-head__meta-value {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.overview-head__meta-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+    .overview-head {
+        flex-direction: column;
+    }
+
+    .overview-head__stats {
+        text-align: left;
+        width: 100%;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .overview-head__meta {
+        justify-content: flex-start;
+    }
+}
