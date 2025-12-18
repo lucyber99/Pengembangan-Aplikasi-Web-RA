@@ -13,15 +13,15 @@ const Navbar = ({ apiBase }) => {
         </div>
 
         <nav className="navbar__links" aria-label="Primary">
-          <a href="#properties" className="navbar__link navbar__link--active">
+          <Link to="/properties" className="navbar__link navbar__link--active">
             Rent
-          </a>
-          <a href="#properties" className="navbar__link">
+          </Link>
+          <Link to="/properties" className="navbar__link">
             Buy
-          </a>
-          <a href="#properties" className="navbar__link">
+          </Link>
+          <Link to="/properties" className="navbar__link">
             Sell
-          </a>
+          </Link>
           <a href="#dashboard" className="navbar__link">
             Manage Property
           </a>

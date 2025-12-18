@@ -20,7 +20,7 @@ const PropertyCard = ({ property, favorite, isCompared, onToggleCompare }) => {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              onToggleCompare(property);
+              onToggleCompare?.(property);
             }}
             style={{
               background: isCompared ? '#2563eb' : 'rgba(255,255,255,0.9)',
