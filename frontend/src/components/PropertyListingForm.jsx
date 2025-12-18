@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import './PropertyListingForm.css';
 
-const PropertyListingForm = () => {
+const PropertyListingForm = ({ onSubmit, initialData = {} }) => {
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        price: '',
-        type: '',
-        address: '',
+        title: initialData.title || '',
+        description: initialData.description || '',
+        price: initialData.price || '',
+        type: initialData.type || '',
+        address: initialData.location || '', // Mapping address to location
+        beds: initialData.beds || '',
+        baths: initialData.baths || '',
+        area: initialData.area || '',
+        photoUrl: initialData.photoUrl || ''
     });
 
     const handleChange = (e) => {
@@ -18,99 +22,209 @@ const PropertyListingForm = () => {
         }));
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData((prev) => ({
+                    ...prev,
+                    photoUrl: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Basic validation
+        if (!formData.title || !formData.price) {
+            alert("Title and Price are required!");
+            return;
+        }
+
+        // Prepare data matching the structure
+        const submissionData = {
+            ...formData,
+            location: formData.address, // Ensure location field is populated
+            // Keep numerical values as numbers if possible, though state is string
+        };
+
+        if (onSubmit) {
+            onSubmit(submissionData);
+        }
+    };
+
     return (
         <div className="property-form-container">
             <div className="property-form-header">
-                <h1>Property Listing Form</h1>
-                <p>Add, edit, or manage your property listings with ease</p>
+                <h1>{initialData.id ? 'Edit Property' : 'Add New Property'}</h1>
+                <p>{initialData.id ? 'Update your property details' : 'List your property to reach millions of buyers'}</p>
             </div>
 
-            <div className="form-section">
-                <h2 className="form-section-title">Basic Information</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="form-section">
+                    <h2 className="form-section-title">Basic Information</h2>
 
-                <div className="form-group">
-                    <label className="form-label">Property Title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        className="form-input"
-                        placeholder="e.g., Modern Sunset Villa"
-                        value={formData.title}
-                        onChange={handleChange}
-                    />
+                    <div className="form-group">
+                        <label className="form-label">Property Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            className="form-input"
+                            placeholder="e.g., Modern Sunset Villa"
+                            value={formData.title}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Description</label>
+                        <textarea
+                            name="description"
+                            className="form-textarea"
+                            placeholder="Provide a detailed description of the property..."
+                            value={formData.description}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-grid-3">
+                        <div className="form-group">
+                            <label className="form-label">Price (IDR)</label>
+                            <input
+                                type="number"
+                                name="price"
+                                className="form-input"
+                                placeholder="850000000"
+                                value={formData.price}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Property Type</label>
+                            <select
+                                name="type"
+                                className="form-select"
+                                value={formData.type}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select type</option>
+                                <option value="House">House</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="form-label">Description</label>
-                    <textarea
-                        name="description"
-                        className="form-textarea"
-                        placeholder="Provide a detailed description of the property..."
-                        value={formData.description}
-                        onChange={handleChange}
-                    />
+                <div className="form-section">
+                    <h2 className="form-section-title">Property Details</h2>
+                    <div className="form-grid-3">
+                        <div className="form-group">
+                            <label className="form-label">Bedrooms</label>
+                            <input
+                                type="number"
+                                name="beds"
+                                className="form-input"
+                                placeholder="3"
+                                value={formData.beds}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Bathrooms</label>
+                            <input
+                                type="number"
+                                name="baths"
+                                className="form-input"
+                                placeholder="2"
+                                value={formData.baths}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Area (sqm)</label>
+                            <input
+                                type="number"
+                                name="area"
+                                className="form-input"
+                                placeholder="120"
+                                value={formData.area}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="form-label">Price</label>
-                    <input
-                        type="text"
-                        name="price"
-                        className="form-input"
-                        placeholder="$ 850,000"
-                        value={formData.price}
-                        onChange={handleChange}
-                    />
+                <div className="form-section">
+                    <h2 className="form-section-title">Location</h2>
+                    <div className="form-group">
+                        <label className="form-label">Address / Location</label>
+                        <input
+                            type="text"
+                            name="address"
+                            className="form-input"
+                            placeholder="e.g., BSD, Tangerang"
+                            value={formData.address}
+                            onChange={handleChange}
+                        />
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="form-label">Property Type</label>
-                    <select
-                        name="type"
-                        className="form-select"
-                        value={formData.type}
-                        onChange={handleChange}
-                    >
-                        <option value="">Select type</option>
-                        <option value="house">House</option>
-                        <option value="apartment">Apartment</option>
-                        <option value="villa">Villa</option>
-                        <option value="commercial">Commercial</option>
-                    </select>
+                <div className="form-section">
+                    <h2 className="form-section-title">Property Photos</h2>
+
+                    <div className="form-group">
+                        <label className="form-label">Property Photo</label>
+                        <div className="photo-upload-area" onClick={() => document.getElementById('photo-upload').click()}>
+                            <div className="upload-icon">
+                                <span>+</span>
+                            </div>
+                            <div className="upload-text">
+                                {formData.photoUrl ? 'Change Photo' : 'Upload Photo'}
+                            </div>
+                            <div className="upload-subtext">
+                                {formData.photoUrl ? 'Click to replace' : 'SVG, PNG, JPG or GIF (max. 5MB)'}
+                            </div>
+                            <input
+                                id="photo-upload"
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                            />
+                            <button type="button" className="upload-btn">Browse Files</button>
+                        </div>
+
+                        {formData.photoUrl && (
+                            <div className="photo-preview" style={{ marginTop: '16px' }}>
+                                <img
+                                    src={formData.photoUrl}
+                                    alt="Preview"
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '300px',
+                                        objectFit: 'cover',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            <div className="form-section">
-                <h2 className="form-section-title">Location</h2>
-                <div className="form-group">
-                    <label className="form-label">Address</label>
-                    <input
-                        type="text"
-                        name="address"
-                        className="form-input"
-                        placeholder="e.g., 123 Main Street, Beverly Hills, CA"
-                        value={formData.address}
-                        onChange={handleChange}
-                    />
+                <div className="form-actions">
+                    <button type="button" className="btn-action btn-delete" onClick={() => window.history.back()}>Cancel</button>
+                    <button type="submit" className="btn-action btn-publish">
+                        {initialData.id ? 'Update Property' : 'Post Property'}
+                    </button>
                 </div>
-            </div>
-
-            <div className="form-section">
-                <h2 className="form-section-title">Property Photos</h2>
-
-                <div className="photo-upload-area">
-                    <div className="upload-icon">💀</div>
-                    <div className="upload-text">Click to upload photos</div>
-                    <div className="upload-subtext">JPG, PNG up to 10MB each</div>
-                    <button className="upload-btn">Browse Files</button>
-                </div>
-
-            </div>
-
-            <div className="form-actions">
-                <button className="btn-action btn-delete">Cancel</button>
-                <button className="btn-action btn-publish">Post Property</button>
-            </div>
+            </form>
         </div>
     );
 };
