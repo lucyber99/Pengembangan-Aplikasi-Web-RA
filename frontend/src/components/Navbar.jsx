@@ -1,31 +1,34 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navbar = ({ apiBase }) => {
   return (
     <header className="navbar">
       <div className="navbar__inner">
-        <div className="navbar__brand">
+        <Link to="/" className="navbar__brand" style={{ textDecoration: 'none' }}>
           <div className="navbar__logo">E</div>
           <div>
             <div className="navbar__title">Estatery</div>
             <div className="navbar__subtitle">Find your place to live</div>
           </div>
-        </div>
+        </Link>
 
         <nav className="navbar__links" aria-label="Primary">
-          <Link to="/properties" className="navbar__link navbar__link--active">
-            Rent
-          </Link>
-          <Link to="/properties" className="navbar__link">
-            Buy
-          </Link>
-          <Link to="/properties" className="navbar__link">
-            Sell
-          </Link>
-          <Link to="/agent/dashboard" className="navbar__link">
-            Manage Property
-          </Link>
-          <a href="#features" className="navbar__link">
+          <NavLink to="/" end className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`.trim()}>
+            Home
+          </NavLink>
+          <NavLink
+            to="/properties"
+            className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`.trim()}
+          >
+            Properties
+          </NavLink>
+          <NavLink
+            to="/agent/dashboard"
+            className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`.trim()}
+          >
+            Dashboard
+          </NavLink>
+          <a href="/#features" className="navbar__link">
             Resources
           </a>
         </nav>

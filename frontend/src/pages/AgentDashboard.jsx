@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Home, MessageSquareText, TrendingUp, Handshake, MoreVertical, Pencil, Trash2, Eye } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -6,6 +6,23 @@ import Footer from '../components/Footer';
 import Button from '../components/ui/Button';
 import { getDemoProperties } from '../utils/demoProperties';
 import './AgentDashboard.css';
+
+const STORAGE_KEY = 'agentProperties';
+
+const readStoredProperties = () => {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeStoredProperties = (properties) => {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+};
 
 const formatPrice = (value) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value || 0);
@@ -60,13 +77,17 @@ const AgentDashboard = () => {
   const navigate = useNavigate();
 
   const [properties, setProperties] = useState(() =>
-    getDemoProperties(8).slice(0, 6).map((p, idx) => ({
+    (readStoredProperties() || getDemoProperties(8).slice(0, 6)).map((p, idx) => ({
       ...p,
       status: idx % 4 === 0 ? 'Draft' : 'Active',
       views: 120 + idx * 31,
       inquiries: 2 + (idx % 4),
     }))
   );
+
+  useEffect(() => {
+    writeStoredProperties(properties);
+  }, [properties]);
 
   const inquiries = useMemo(
     () => [
@@ -115,12 +136,6 @@ const AgentDashboard = () => {
     };
   }, [properties, inquiries.length]);
 
-  const onEdit = (propertyId) => {
-    const nextTitle = window.prompt('Edit title', properties.find((p) => p.id === propertyId)?.title || '');
-    if (nextTitle == null) return;
-    setProperties((prev) => prev.map((p) => (p.id === propertyId ? { ...p, title: nextTitle } : p)));
-  };
-
   const onDelete = (propertyId) => {
     const ok = window.confirm('Delete this property?');
     if (!ok) return;
@@ -158,13 +173,7 @@ const AgentDashboard = () => {
         <section className="agent-section">
           <div className="agent-section__head">
             <h2>My Properties</h2>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                window.alert('Add Property: wire to create form page.');
-              }}
-            >
+            <Button variant="primary" size="sm" to="/agent/properties/new">
               Add Property
             </Button>
           </div>
@@ -195,7 +204,12 @@ const AgentDashboard = () => {
                     <button type="button" className="agent-iconbtn" onClick={() => navigate(`/properties/${p.id}`)} aria-label="View">
                       <Eye size={16} />
                     </button>
-                    <button type="button" className="agent-iconbtn" onClick={() => onEdit(p.id)} aria-label="Edit">
+                    <button
+                      type="button"
+                      className="agent-iconbtn"
+                      onClick={() => navigate(`/agent/properties/${p.id}/edit`)}
+                      aria-label="Edit"
+                    >
                       <Pencil size={16} />
                     </button>
                     <button type="button" className="agent-iconbtn agent-iconbtn--danger" onClick={() => onDelete(p.id)} aria-label="Delete">
@@ -225,4 +239,3 @@ const AgentDashboard = () => {
 };
 
 export default AgentDashboard;
-

@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './PropertyListingForm.css';
 
-const PropertyListingForm = ({ onSubmit, initialData = {} }) => {
+const PropertyListingForm = ({ onSubmit, onCancel, initialData = {}, submitLabel }) => {
     const [formData, setFormData] = useState({
         title: initialData.title || '',
         description: initialData.description || '',
         price: initialData.price || '',
         type: initialData.type || '',
-        address: initialData.location || '', // Mapping address to location
+        address: initialData.address || initialData.location || '', // Mapping address to location
         beds: initialData.beds || '',
         baths: initialData.baths || '',
         area: initialData.area || '',
         photoUrl: initialData.photoUrl || ''
     });
+
+    useEffect(() => {
+        setFormData({
+            title: initialData.title || '',
+            description: initialData.description || '',
+            price: initialData.price || '',
+            type: initialData.type || '',
+            address: initialData.address || initialData.location || '',
+            beds: initialData.beds || '',
+            baths: initialData.baths || '',
+            area: initialData.area || '',
+            photoUrl: initialData.photoUrl || ''
+        });
+    }, [initialData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -219,9 +233,18 @@ const PropertyListingForm = ({ onSubmit, initialData = {} }) => {
                 </div>
 
                 <div className="form-actions">
-                    <button type="button" className="btn-action btn-delete" onClick={() => window.history.back()}>Cancel</button>
+                    <button
+                        type="button"
+                        className="btn-action btn-delete"
+                        onClick={() => {
+                            if (typeof onCancel === 'function') onCancel();
+                            else window.history.back();
+                        }}
+                    >
+                        Cancel
+                    </button>
                     <button type="submit" className="btn-action btn-publish">
-                        {initialData.id ? 'Update Property' : 'Post Property'}
+                        {submitLabel || (initialData.id ? 'Update Property' : 'Post Property')}
                     </button>
                 </div>
             </form>
