@@ -5,6 +5,7 @@ import Register from './pages/register';
 import PropertyBrowse from './pages/PropertyBrowse';
 import PropertyDetail from './pages/PropertyDetail';
 import AgentDashboard from './pages/AgentDashboard';
+import ProfileSettings from './pages/ProfileSettings';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/properties" element={<PropertyBrowse />} />
       <Route path="/properties/:id" element={<PropertyDetail />} />
       <Route path="/agent/dashboard" element={<AgentDashboard />} />
+      <Route path="/profile" element={<ProfileSettings />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
