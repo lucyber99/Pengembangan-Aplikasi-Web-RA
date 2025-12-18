@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Eye, Mail, Lock, User, Briefcase, Check } from 'lucide-react';
+import Button from '../components/ui/Button';
+import Divider from '../components/ui/Divider';
+import SocialAuthButton from '../components/ui/SocialAuthButton';
 
 const SignIn = () => {
   const [selectedRole, setSelectedRole] = useState('buyer');
@@ -104,24 +107,15 @@ const SignIn = () => {
             </Link>
           </div>
 
-          <button className="auth-primary" type="button">
-            <span>Sign In</span>
-            <ArrowRight size={18} />
-          </button>
+          <Button variant="primary" size="lg" fullWidth type="button" rightIcon={<ArrowRight size={18} />}>
+            Sign In
+          </Button>
 
-          <div className="divider">
-            <span>Or sign in with</span>
-          </div>
+          <Divider label="Or sign in with" />
 
           <div className="social-row">
-            <button className="social-btn" type="button">
-              <span className="social-icon google" aria-hidden />
-              <span>Google</span>
-            </button>
-            <button className="social-btn" type="button">
-              <span className="social-icon apple" aria-hidden />
-              <span>Apple</span>
-            </button>
+            <SocialAuthButton provider="google" onClick={() => {}} label="Google" />
+            <SocialAuthButton provider="apple" onClick={() => {}} label="Apple" />
           </div>
 
           <div className="auth-footer">

@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage';
 import SignIn from './pages/sign-in';
 import Register from './pages/register';
 import PropertyBrowse from './pages/PropertyBrowse';
+import PropertyDetail from './pages/PropertyDetail';
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Route path="/login" element={<SignIn />} />
       <Route path="/register" element={<Register />} />
       <Route path="/properties" element={<PropertyBrowse />} />
+      <Route path="/properties/:id" element={<PropertyDetail />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

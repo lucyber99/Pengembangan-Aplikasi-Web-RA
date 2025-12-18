@@ -14,6 +14,9 @@ import {
   Building2,
   BadgeDollarSign,
 } from 'lucide-react';
+import Button from '../components/ui/Button';
+import Divider from '../components/ui/Divider';
+import SocialAuthButton from '../components/ui/SocialAuthButton';
 
 const scorePassword = (password) => {
   if (!password) return { score: 0, label: 'Too weak', hint: 'Must be at least 8 characters' };
@@ -262,24 +265,23 @@ const Register = () => {
             </>
           )}
 
-          <button className="auth-primary" type="button" onClick={onPrimary} disabled={step === 1 && !canGoNext}>
-            <span>{step === 1 ? 'Continue' : 'Create Account'}</span>
-            <ArrowRight size={18} />
-          </button>
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            type="button"
+            onClick={onPrimary}
+            disabled={step === 1 && !canGoNext}
+            rightIcon={<ArrowRight size={18} />}
+          >
+            {step === 1 ? 'Continue' : 'Create Account'}
+          </Button>
 
-          <div className="divider">
-            <span>Or register with</span>
-          </div>
+          <Divider label="Or register with" />
 
           <div className="social-row">
-            <button className="social-btn" type="button">
-              <span className="social-icon google" aria-hidden />
-              <span>Google</span>
-            </button>
-            <button className="social-btn" type="button">
-              <span className="social-icon apple" aria-hidden />
-              <span>Apple</span>
-            </button>
+            <SocialAuthButton provider="google" onClick={() => {}} label="Google" />
+            <SocialAuthButton provider="apple" onClick={() => {}} label="Apple" />
           </div>
 
           <div className="auth-footer">

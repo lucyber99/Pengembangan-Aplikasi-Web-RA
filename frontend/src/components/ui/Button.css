@@ -1,0 +1,91 @@
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease,
+    opacity 0.15s ease;
+  user-select: none;
+  color: inherit;
+}
+
+.ui-btn--block {
+  width: 100%;
+}
+
+.ui-btn--sm {
+  height: 38px;
+  font-size: 0.95rem;
+}
+
+.ui-btn--md {
+  height: 44px;
+  font-size: 1rem;
+}
+
+.ui-btn--lg {
+  height: 56px;
+  font-size: 1.05rem;
+  border-radius: 18px;
+}
+
+.ui-btn--primary {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+.ui-btn--primary:hover {
+  transform: translateY(-1px);
+}
+
+.ui-btn--ghost {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.ui-btn--ghost:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ui-btn--link {
+  background: transparent;
+  border-color: transparent;
+  color: #2563eb;
+  padding: 0;
+  height: auto;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.ui-btn--link:hover {
+  text-decoration: underline;
+}
+
+.ui-btn:disabled,
+.ui-btn--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.ui-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-btn__label {
+  display: inline-flex;
+  align-items: center;
+}
+

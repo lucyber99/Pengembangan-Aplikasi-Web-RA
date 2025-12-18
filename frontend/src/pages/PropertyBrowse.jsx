@@ -1,22 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { LayoutGrid, List, ArrowUpDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FilterSearch from '../components/FilterSearch';
 import PropertyCard from '../components/PropertyCard';
 import Pagination from '../components/Pagination';
+import { getDemoProperties } from '../utils/demoProperties';
 import './PropertyBrowse.css';
-
-const FALLBACK_PHOTOS = [
-  'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1519710887729-7fcbf9f39f95?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=80',
-];
 
 const normalizeProperty = (item, index) => {
   const id = item?.id ?? item?.property_id ?? index + 1;
@@ -34,7 +25,7 @@ const normalizeProperty = (item, index) => {
     beds,
     baths,
     area,
-    photoUrl: item?.photoUrl ?? item?.image_url ?? item?.photo_url ?? FALLBACK_PHOTOS[id % FALLBACK_PHOTOS.length],
+    photoUrl: item?.photoUrl ?? item?.image_url ?? item?.photo_url,
   };
 };
 
@@ -102,30 +93,27 @@ const PropertyBrowse = () => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         const items = Array.isArray(data) ? data : data?.items ?? data?.results ?? [];
-        const normalized = items.map((item, idx) => normalizeProperty(item, idx));
+        if (!Array.isArray(items) || items.length === 0) {
+          if (!isMounted) return;
+          setError('Backend kosong. Menampilkan data contoh.');
+          setProperties(getDemoProperties().map((item, idx) => normalizeProperty(item, idx)));
+          setStatus('ok');
+          return;
+        }
+
+        const demo = getDemoProperties(items.length);
+        const normalized = items.map((item, idx) => normalizeProperty(item, idx)).map((p, idx) => {
+          const fallbackPhoto =
+            demo[idx]?.photoUrl || 'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1400&q=80';
+          return { ...p, photoUrl: p.photoUrl || fallbackPhoto, id: p.id ?? idx + 1 };
+        });
         if (!isMounted) return;
         setProperties(normalized);
         setStatus('ok');
       } catch (e) {
         if (!isMounted) return;
         setError('Tidak bisa menghubungi backend. Menampilkan data contoh.');
-        setProperties(
-          Array.from({ length: 18 }).map((_, idx) =>
-            normalizeProperty(
-              {
-                id: idx + 1,
-                title: `Modern Sunset Villa ${idx + 1}`,
-                location: ['Jakarta', 'Bali', 'Tangerang', 'Bandung'][idx % 4],
-                price: 650000000 + idx * 125000000,
-                type: idx % 2 === 0 ? 'House' : 'Apartment',
-                beds: 1 + (idx % 5),
-                baths: 1 + (idx % 3),
-                area: 60 + (idx % 7) * 25,
-              },
-              idx
-            )
-          )
-        );
+        setProperties(getDemoProperties().map((item, idx) => normalizeProperty(item, idx)));
         setStatus('error');
       }
     };
@@ -213,7 +201,9 @@ const PropertyBrowse = () => {
 
             <div className={`property-grid ${viewMode === 'list' ? 'property-grid--list' : ''}`.trim()}>
               {paged.map((property) => (
-                <PropertyCard key={property.id} property={property} />
+                <Link key={property.id} to={`/properties/${property.id}`} className="browse-cardlink">
+                  <PropertyCard property={property} />
+                </Link>
               ))}
             </div>
 
@@ -229,4 +219,3 @@ const PropertyBrowse = () => {
 };
 
 export default PropertyBrowse;
-
