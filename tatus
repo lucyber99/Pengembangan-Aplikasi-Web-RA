@@ -1,0 +1,42 @@
+[33md51f3a4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mhabbi[m[33m, [m[1;31morigin/habbi[m[33m, [m[1;31morigin/andryano-tubes-paw[m[33m)[m add: agent dashboard
+[33m46b63b3[m add: dummy properties to frontend
+[33mc22385a[m add: pagination & pages: register & property browse
+[33m1f5b93b[m pull from Fe-component
+[33ma22dd13[m Add compare functionality to PropertyCard component
+[33m5e844f4[m Create InsightCompare.css
+[33mdc90d0a[m Create InsightCompare.jsx
+[33mc57725c[m Create CompareProperty.css
+[33m6ce071b[m Add CompareProperty component for property comparison
+[33ma290332[m Create FilterSearch.css
+[33m2acaf81[m Add FilterSearch component for property filtering
+[33m294a0ac[m Add PropertyListing component to display properties
+[33ma8d56c9[m Create PropertyListingForm.css
+[33mf59f58d[m Fix file path for PropertyListingForm.jsx
+[33ma3e553b[m Add Property Listing Form component
+[33mdca63a4[m Create OverviewPropertyHead.css
+[33mc272b38[m Create OverviewPropertyHead.jsx
+[33mfa570f3[m Add OverviewProperty.css for styling overview component
+[33m75f6d83[m Add OverviewProperty component for property details
+[33m28d522e[m Add InquiryCard component
+[33m43d09b6[m Add InquiryCard CSS styles
+[33mb07e42c[m Add InquiryCard component for property inquiries
+[33m73e290a[m fix: frontend css
+[33m84602bb[m menambahkan sign in
+[33m25e0238[m Menambahkan page sign in
+[33ma620152[m add: landing page
+[33m422c92f[m add: herp & section header
+[33m2079f4a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix: frontend to jsx
+[33m731f817[m update: transform tsx to jsx
+[33m9116744[m update branch andryano-tubes-paw
+[33m02fd9b2[m add: navbar & footer
+[33me19a3e6[m add: frontend
+[33m6023cfb[m Merge branch 'andryano-tubes-paw' from origin
+[33m8c0b419[m fix routes
+[33mbbb54d8[m fix: fe & be connected di tampilan react + vite
+[33m688bff0[m fix something
+[33m5d3763a[m fe: setup
+[33m35d940f[m Add React frontend scaffold with Vite
+[33mb6564db[m fix endpoint
+[33m8361152[m add endpoint
+[33m02b8cb9[m setup pyramid
+[33mb01978d[m Initial commit
