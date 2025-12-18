@@ -1,0 +1,27 @@
+# Python caches and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+
+# Editor/IDE settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# Environment/config secrets
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Alembic migration artifacts
+alembic/versions/*.pyc
+alembic/versions/*.pyo

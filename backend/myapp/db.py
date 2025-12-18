@@ -12,6 +12,7 @@ Base = declarative_base()
 
 
 def initialize_sql(engine):
+    """Bind engine, register session with Pyramid transaction manager, and create tables."""
     DBSession.configure(bind=engine)
     register(DBSession)   # integrate with Pyramid transaction manager
     Base.metadata.bind = engine

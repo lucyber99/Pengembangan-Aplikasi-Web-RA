@@ -81,7 +81,10 @@ def add_favorite(request):
 def remove_favorite(request):
     """Remove property from favorites"""
     try:
-        property_id = request.matchdict['property_id']
+        try:
+            property_id = int(request.matchdict['property_id'])
+        except (ValueError, TypeError):
+            raise HTTPBadRequest('Invalid property id')
         
         favorite = DBSession.query(Favorite).filter(
             Favorite.user_id == request.current_user.id,
@@ -109,7 +112,10 @@ def remove_favorite(request):
 @require_auth
 def check_favorite(request):
     """Check if property is in user's favorites"""
-    property_id = request.matchdict['property_id']
+    try:
+        property_id = int(request.matchdict['property_id'])
+    except (ValueError, TypeError):
+        raise HTTPBadRequest('Invalid property id')
     
     favorite = DBSession.query(Favorite).filter(
         Favorite.user_id == request.current_user.id,

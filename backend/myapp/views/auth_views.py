@@ -9,6 +9,7 @@ import transaction
 
 @view_config(route_name='register', renderer='json', request_method='POST')
 def register(request):
+    """Handle buyer/agent registration and return JWT."""
     try:
         data = request.json_body
         
@@ -24,7 +25,7 @@ def register(request):
             raise HTTPBadRequest('Email already registered')
         
         # Validate role
-        valid_roles = ['buyer', 'agent', 'admin']
+        valid_roles = ['buyer', 'agent']
         if data['role'] not in valid_roles:
             raise HTTPBadRequest(f'Invalid role. Must be one of: {", ".join(valid_roles)}')
         
@@ -64,6 +65,7 @@ def register(request):
 
 @view_config(route_name='login', renderer='json', request_method='POST')
 def login(request):
+    """Authenticate user credentials and return JWT."""
     try:
         data = request.json_body
         
@@ -99,6 +101,7 @@ def login(request):
 @view_config(route_name='me', renderer='json', request_method='GET')
 @require_auth
 def get_current_user_info(request):
+    """Return the authenticated user's profile."""
     user_dict = request.current_user.to_dict()
 
     return {
@@ -110,6 +113,7 @@ def get_current_user_info(request):
 @view_config(route_name='update_profile', renderer='json', request_method='PUT')
 @require_auth
 def update_profile(request):
+    """Allow logged-in users to update their profile."""
     try:
         data = request.json_body
         user = request.current_user

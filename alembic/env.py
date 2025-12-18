@@ -1,29 +1,35 @@
+import os
+import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# Make backend/ importable so we can load settings and models
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+sys.path.append(os.path.join(BASE_DIR, "backend"))
+
+from pyramid.paster import get_appsettings  # noqa: E402
+from myapp.db import Base  # noqa: E402
+from myapp import models  # noqa: F401,E402  # load model metadata
+
+# Alembic Config object
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+# Load Pyramid settings to reuse sqlalchemy.url
+pyramid_config = config.get_main_option("pyramid_config", "backend/development.ini")
+settings = get_appsettings(pyramid_config)
+sqlalchemy_url = settings.get("sqlalchemy.url")
+if sqlalchemy_url:
+    config.set_main_option("sqlalchemy.url", sqlalchemy_url)
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# Target metadata for autogenerate
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
