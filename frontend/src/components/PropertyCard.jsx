@@ -5,7 +5,7 @@ const formatPrice = (value) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-const PropertyCard = ({ property, favorite }) => {
+const PropertyCard = ({ property, favorite, isCompared, onToggleCompare }) => {
   return (
     <article className="property-card">
       <div
@@ -15,7 +15,29 @@ const PropertyCard = ({ property, favorite }) => {
         aria-label={property.title}
       >
         <div className="property-card__badge">{property.type}</div>
-        {favorite && <div className="property-card__favorite">★</div>}
+        <div className="property-card__actions" style={{ position: 'absolute', top: '12px', right: '12px', display: 'flex', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              onToggleCompare(property);
+            }}
+            style={{
+              background: isCompared ? '#2563eb' : 'rgba(255,255,255,0.9)',
+              color: isCompared ? 'white' : '#1e293b',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}
+          >
+            {isCompared ? 'Added' : '+ Compare'}
+          </button>
+          {favorite && <div className="property-card__favorite" style={{ position: 'static' }}>★</div>}
+        </div>
       </div>
       <div className="property-card__body">
         <div className="property-card__title">{property.title}</div>
