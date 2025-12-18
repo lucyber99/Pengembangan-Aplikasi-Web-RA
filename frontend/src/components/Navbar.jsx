@@ -22,9 +22,9 @@ const Navbar = ({ apiBase }) => {
           <Link to="/properties" className="navbar__link">
             Sell
           </Link>
-          <a href="#dashboard" className="navbar__link">
+          <Link to="/agent/dashboard" className="navbar__link">
             Manage Property
-          </a>
+          </Link>
           <a href="#features" className="navbar__link">
             Resources
           </a>
