@@ -1,0 +1,62 @@
+.insight-compare {
+    background: #f0f9ff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 24px;
+    border: 1px solid #bae6fd;
+}
+
+.insight-title {
+    margin: 0 0 20px;
+    font-size: 1.2rem;
+    color: #0c4a6e;
+}
+
+.insight-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.insight-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1.5fr;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(186, 230, 253, 0.5);
+}
+
+.insight-row:last-child {
+    border-bottom: none;
+}
+
+.insight-label {
+    font-weight: 700;
+    color: #475569;
+}
+
+.insight-winner {
+    color: #0284c7;
+    font-weight: 600;
+}
+
+.insight-value {
+    color: #334155;
+}
+
+.insight-diff {
+    font-size: 0.9rem;
+    color: #64748b;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .insight-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        text-align: left;
+    }
+
+    .insight-diff {
+        text-align: left;
+    }
+}
