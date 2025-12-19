@@ -162,7 +162,7 @@ Konfigurasi utamanya ditangani melalui `backend/development.ini`. Pastikan `sqla
 ## 6. Link Deployment
 *   **Frontend (Vercel):** https://pengembangan-aplikasi-web-ra.vercel.app/
 *   **Backend (Domain):** https://pengembangan-aplikasi-web-ra.onrender.com/
-*   **Video Demo:** [Masukkan Link YouTube/Drive Di Sini]
+*   **Video Demo:** https://youtu.be/k33ZKPeuCSA
 
 ## 7. Skema Database
 Database menggunakan PostgreSQL dengan model relasional inti sebagai berikut:
