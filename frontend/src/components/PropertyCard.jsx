@@ -5,7 +5,17 @@ const formatPrice = (value) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-const PropertyCard = ({ property, favorite }) => {
+const PropertyCard = ({ property, favorite = false, isFavorite = false, onToggleFavorite }) => {
+  const handleFavoriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onToggleFavorite) {
+      onToggleFavorite(property.id, isFavorite || favorite);
+    }
+  };
+
+  const showFavorite = favorite || isFavorite;
+
   return (
     <article className="property-card">
       <div
@@ -15,7 +25,18 @@ const PropertyCard = ({ property, favorite }) => {
         aria-label={property.title}
       >
         <div className="property-card__badge">{property.type}</div>
-        {favorite && <div className="property-card__favorite">★</div>}
+        {onToggleFavorite ? (
+          <button
+            className={`property-card__favorite ${showFavorite ? 'property-card__favorite--active' : ''}`}
+            onClick={handleFavoriteClick}
+            aria-label={showFavorite ? 'Hapus dari favorit' : 'Tambahkan ke favorit'}
+            title={showFavorite ? 'Hapus dari favorit' : 'Tambahkan ke favorit'}
+          >
+            {showFavorite ? '★' : '☆'}
+          </button>
+        ) : (
+          showFavorite && <div className="property-card__favorite property-card__favorite--active">★</div>
+        )}
       </div>
       <div className="property-card__body">
         <div className="property-card__title">{property.title}</div>

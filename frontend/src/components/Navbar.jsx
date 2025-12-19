@@ -20,6 +20,9 @@ const Navbar = ({ apiBase }) => {
           <a href="#properties" className="navbar__link">
             Sell
           </a>
+          <a href="#favorites" className="navbar__link">
+            Favorites
+          </a>
           <a href="#dashboard" className="navbar__link">
             Manage Property
           </a>

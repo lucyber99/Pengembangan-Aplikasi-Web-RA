@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PropertyCard from './components/PropertyCard';
+import Favorites from './components/Favorites';
+import { favoritesAPI, propertiesAPI } from './utils/api';
 
 const sampleProperties = [
   {
@@ -60,8 +62,58 @@ const featureCards = [
 function App() {
   const [apiStatus, setApiStatus] = useState('idle');
   const [message, setMessage] = useState('');
+  const [properties, setProperties] = useState([]);
+  const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [loadingProperties, setLoadingProperties] = useState(false);
 
   const apiBase = useMemo(() => import.meta.env.VITE_API_BASE || 'http://localhost:6543', []);
+
+  const loadProperties = async () => {
+    try {
+      setLoadingProperties(true);
+      const response = await propertiesAPI.getProperties();
+      if (response.success) {
+        // Transform API response to match PropertyCard format
+        const transformed = (response.properties || []).map(prop => {
+          const photoUrl = prop.photos && prop.photos.length > 0
+            ? prop.photos[0].url
+            : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80';
+          
+          return {
+            id: prop.id,
+            title: prop.title,
+            location: prop.location,
+            price: parseFloat(prop.price),
+            type: prop.type ? prop.type.charAt(0).toUpperCase() + prop.type.slice(1) : prop.type,
+            beds: prop.bedrooms,
+            baths: prop.bathrooms,
+            area: parseFloat(prop.area),
+            photoUrl: photoUrl,
+          };
+        });
+        setProperties(transformed);
+      }
+    } catch (error) {
+      console.error('Error loading properties:', error);
+      // Fallback to sample properties if API fails
+      setProperties(sampleProperties);
+    } finally {
+      setLoadingProperties(false);
+    }
+  };
+
+  const loadFavoriteIds = async () => {
+    try {
+      const response = await favoritesAPI.getFavorites();
+      if (response.success) {
+        const ids = new Set((response.favorites || []).map(fav => fav.id));
+        setFavoriteIds(ids);
+      }
+    } catch (error) {
+      // Silently fail if user is not logged in
+      console.log('Could not load favorites (user may not be logged in)');
+    }
+  };
 
   useEffect(() => {
     const checkApi = async () => {
@@ -70,6 +122,8 @@ function App() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         setApiStatus('ok');
         setMessage('Backend reachable. Ready to build UI.');
+        loadProperties();
+        loadFavoriteIds();
       } catch (error) {
         setApiStatus('error');
         setMessage(
@@ -79,7 +133,28 @@ function App() {
     };
 
     checkApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiBase]);
+
+
+  const handleToggleFavorite = async (propertyId, isCurrentlyFavorite) => {
+    try {
+      if (isCurrentlyFavorite) {
+        await favoritesAPI.removeFavorite(propertyId);
+        setFavoriteIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(propertyId);
+          return newSet;
+        });
+      } else {
+        await favoritesAPI.addFavorite(propertyId);
+        setFavoriteIds(prev => new Set([...prev, propertyId]));
+      }
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
+      alert(err.message || 'Failed to update favorite');
+    }
+  };
 
   return (
     <>
@@ -154,18 +229,40 @@ function App() {
 
         <section className="showcase" id="properties">
           <div className="section-header">
-            <p className="eyebrow">Preview listings</p>
-            <h2>Contoh data dummy untuk UI</h2>
+            <p className="eyebrow">Properties</p>
+            <h2>Daftar Properti</h2>
             <p className="lede">
-              Nanti ganti dengan data dari endpoint <code>/api/properties</code>.
+              {loadingProperties 
+                ? 'Memuat properti...'
+                : properties.length > 0
+                  ? `Menampilkan ${properties.length} properti. Klik ikon bintang untuk menyimpan ke favorit.`
+                  : 'Tidak ada properti tersedia.'}
             </p>
           </div>
           <div className="property-grid">
-            {sampleProperties.map((property, idx) => (
-              <PropertyCard key={property.id} property={property} favorite={idx === 0} />
-            ))}
+            {properties.length > 0 ? (
+              properties.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  isFavorite={favoriteIds.has(property.id)}
+                  onToggleFavorite={handleToggleFavorite}
+                />
+              ))
+            ) : !loadingProperties ? (
+              sampleProperties.map((property, idx) => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  favorite={idx === 0}
+                  onToggleFavorite={handleToggleFavorite}
+                />
+              ))
+            ) : null}
           </div>
         </section>
+
+        <Favorites />
 
         <section className="workflow" id="dashboard">
           <div className="workflow__card">

@@ -437,6 +437,32 @@ li {
   right: 12px;
   color: #fbbf24;
   font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.property-card__favorite:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.property-card__favorite--active {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.2);
+}
+
+.property-card__favorite--active:hover {
+  background: rgba(251, 191, 36, 0.3);
 }
 
 .property-card__body {
