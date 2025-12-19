@@ -99,12 +99,6 @@ def create_property(request):
 
         transaction.commit()
 
-<<<<<<< HEAD
-        return {
-            "success": True,
-            "message": "Property created successfully",
-            "property": response_data
-=======
         # Reload with photos eagerly to avoid detached errors
         property_with_photos = (
             DBSession.query(Property)
@@ -117,7 +111,6 @@ def create_property(request):
             'success': True,
             'message': 'Property created successfully',
             'property': property_with_photos.to_dict(include_photos=True) if property_with_photos else property.to_dict()
->>>>>>> acul
         }
 
     except Exception as e:
